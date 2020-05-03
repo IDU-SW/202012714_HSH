@@ -50,7 +50,7 @@ async function addPlayer(req, res) {
     }
 
     const team = req.body.team;
-    const age = parseInt(req.body.age);
+    const age = req.body.age;
     const nickname = req.body.nickname;
 
     try {
@@ -88,11 +88,11 @@ async function updatePlayer(req, res) {
         return;
     }
     const team = req.body.team;
-    const age = parseInt(req.body.age);
+    const age = req.body.age;
     const nickname = req.body.nickname;
 
     try {
-        const result = await players.updatePlayer(id, player, team, age, nickname);
+        const result = await players.updateplayer(id, player, team, age, nickname);
         console.log(result);
         res.render('updateComplete',{data:result});
     }
