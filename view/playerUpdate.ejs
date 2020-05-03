@@ -1,0 +1,21 @@
+<html>
+<head>
+   <meta charset="UTF-8" />
+    <title>PLAYER</title>
+</head>
+<body>
+    <h1><%= detail.player %> 수정하기</h1> 
+    <form action="/players/edit" method="POST" >
+        <input type="hidden" name="id" value="<%= detail.id %>">
+<pre>
+    선수명  : <input type="text" name="player" value="<%= detail.player %>" style="width:400px;"></br>
+    소속팀  : <input type="text" name="team" value="<%= detail.team %>"style="width:400px;"></br>
+    나이(만): <input type="text" name="age" value="<%= detail.age %>"style="width:200px;"></br>
+    칭호.   : <input type="text" name="nickname" value="<%= detail.nickname %>" style="width:600px;"></br>
+<p>
+<input type="submit" value="수정">  <input type="button" value="돌아가기" onclick="history.back(-1)">
+</p>
+</pre>
+    </form> 
+</body>
+</html>

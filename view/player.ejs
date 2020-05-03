@@ -1,0 +1,21 @@
+<html>
+<head>
+   <meta charset="UTF-8" />
+    <title>PLAYER</title>
+</head>
+<body>
+    <h1>선수명단</h1>
+    <p>
+        <input type="button" value="선수등록" onclick="location.href='/player/add'">
+    </p>
+    <% players.forEach(function(item) { %>
+    <h3><a href='/players/<%= item.id %>'>ID : <%= item.id %></a></h3>
+    
+    선수명   : <%= item.player %>    </br>
+    소속팀   : <%= item.team %>    </br>
+    나이(만) : <%= item.age %>   </br>
+    칭호.    : <%= item.nickname %> </br>
+        
+    <% }) %>
+</body>
+</html>
