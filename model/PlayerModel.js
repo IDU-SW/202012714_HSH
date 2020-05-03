@@ -15,32 +15,6 @@ class Player {
             return [];
         } 
     }
-
-    addPlayer(player, team, age, nickname) {
-        return new Promise((resolve, reject) => {
-            let last = this.players[this.players.length - 1];
-            let id = last.id + 1;
-
-            let newPlayer = {id, player, team, age, nickname};
-            this.players.push(newPlayer);
-
-            resolve(newPlayer);
-        });
-    }
-    updatePlayer(playerId, team, age, nickname) {
-        return new Promise((resolve, reject) => {
-            let id = Number(playerId);
-            let newPlayer = {id, team, age, nickname};
-            for (var player1 of this.players ) {
-                if ( player1.id == id ) {
-                    this.players.splice(id, 1, newFood); // 
-                    resolve(newPlayer);
-                    console.log(newPlayer);
-                    return;
-                }
-            }
-        });
-    }
     // Promise - Reject
     getPlayerDetail(playerId) {
         return new Promise((resolve, reject) => {
@@ -53,11 +27,38 @@ class Player {
             reject({msg:'Can not find Player', code:404});
         });
     }
-    deletePlayer(id) {
+
+    addPlayer(player, team, age, nickname) {
+        return new Promise((resolve, reject) => {
+            let last = this.players[this.players.length - 1];
+            let id = last.id + 1;
+
+            let newPlayer = {id, player, team, age, nickname};
+            this.players.push(newPlayer);
+
+            resolve(newPlayer);
+        });
+    }
+    updateplayer(playerId, player, team, age, nickname) {
+        return new Promise((resolve, reject) => {
+            let id = Number(playerId);
+            let newPlayer = {id, player, team, age, nickname};
+            for (var player1 of this.players ) {
+                if ( player1.id == id ) {
+                    this.players.splice(id, 1, newPlayer); // 
+                    resolve(newPlayer);
+                    console.log(newPlayer);
+                    return;
+                }
+            }
+        });
+    }
+    
+    deletePlayer(playerId) {
         return new Promise((resolve, reject) => {
             for (var player of this.players ) {
-                if ( player.id == id ) {
-                    this.players.splice(id, 1);
+                if ( player.id == playerId ) {
+                    this.players.pop(player);
                     resolve(player);
                     return;
                 }
