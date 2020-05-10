@@ -9,8 +9,8 @@
         <input type="button" value="선수등록" onclick="location.href='/player/add'">
     </p>
     <% players.forEach(function(item) { %>
-    <h3><a href='/players/<%= item.id %>'>ID : <%= item.id %></a></h3>
-    
+    <h3><a href='/players/<%= item.player_id %>'>ID : <%= item.player_id %></a></h3>
+
     선수명   : <%= item.player %>    </br>
     소속팀   : <%= item.team %>    </br>
     나이(만) : <%= item.age %>   </br>

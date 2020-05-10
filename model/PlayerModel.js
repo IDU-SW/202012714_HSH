@@ -28,7 +28,7 @@ class Player {
     // Promise - Reject
     getPlayerDetail = async(player_id) => {
     
-        const sql = 'SELECT * from players where id = ?';
+        const sql = 'SELECT * from players where player_id = ?';
         let conn;
         try {
             conn = await dbc1.getConnection();

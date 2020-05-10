@@ -13,7 +13,7 @@
     </br>
 
     <form name="detail" method="post" action="/players/delete">
-        <input type="hidden" name="id" value="<%= detail.id %>">
+        <input type="hidden" name="player_id" value="<%= detail.player_id %>">
         <input type="button" value="수정" onclick="location.href='/player/detail/<%= detail.id %>'">&nbsp;
         <input type="submit" value="삭제">
     </form>  
