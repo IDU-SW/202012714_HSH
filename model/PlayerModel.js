@@ -1,71 +1,102 @@
 const fs = require('fs');
+var dbc1 = require('./dbConnection');
 
-class Player { 
-    constructor() {
+class Player {
+    constructor(){
         const data = fs.readFileSync('./model/data.json');
         this.players = JSON.parse(data)
     }
 
+
+
     // Promise 예제
-    getPlayerList() {
-        if (this.players) {
-            return this.players;
+    getPlayerList = async() => {
+   
+        const sql = 'SELECT * from players';
+        let conn;
+        try {
+            conn = await dbc1.getConnection();
+            const [rows, metadata] = await conn.query(sql);
+            conn.release();
+            return rows;
+        } catch (error) {
+            console.log(1);
+        } finally {
+            if ( conn ) conn.release();
         }
-        else {
-            return [];
-        } 
     }
     // Promise - Reject
-    getPlayerDetail(playerId) {
-        return new Promise((resolve, reject) => {
-            for (var player of this.players ) {
-                if ( player.id == playerId ) {
-                    resolve(player);
-                    return;
-                }
-            }
-            reject({msg:'Can not find Player', code:404});
-        });
+    getPlayerDetail = async(player_id) => {
+    
+        const sql = 'SELECT * from players where id = ?';
+        let conn;
+        try {
+            conn = await dbc1.getConnection();
+            const [rows, metadata] = await conn.query(sql, player_id);
+            conn.release();
+            console.log(rows);
+            return rows[0];
+        } catch (error) {
+            console.error(error);
+        } finally {
+            if ( conn ) conn.release();
+        }
     }
 
-    addPlayer(player, team, age, nickname) {
-        return new Promise((resolve, reject) => {
-            let last = this.players[this.players.length - 1];
-            let id = last.id + 1;
-
-            let newPlayer = {id, player, team, age, nickname};
-            this.players.push(newPlayer);
-
-            resolve(newPlayer);
-        });
+    addPlayer = async(player, team, age, nickname) => {
+ 
+        const data = [player, team, age, nickname];
+        const sql = 'insert into players(player, team, age, nickname) values(?, ?, ?, ?)';
+        let conn;
+        try {
+            conn = await dbc1.getConnection();
+            const [rows, metadata] = await conn.query(sql, data);
+            conn.release();
+            console.log('rows',rows);
+            return rows[0];
+        } catch (error) {
+            console.error(error);
+            return -1;
+        } finally {
+            if ( conn ) conn.release();
+        }
     }
-    updateplayer(playerId, player, team, age, nickname) {
-        return new Promise((resolve, reject) => {
-            let id = Number(playerId);
-            let newPlayer = {id, player, team, age, nickname};
-            for (var player1 of this.players ) {
-                if ( player1.id == id ) {
-                    this.players.splice(id, 1, newPlayer); // 
-                    resolve(newPlayer);
-                    console.log(newPlayer);
-                    return;
-                }
-            }
-        });
+    updateplayer = async(player_id, player, team, age, nickname) => {
+
+        const data = [player, team, age, nickname, player_id];
+        const sql = 'update players set player = ?, team = ?, age = ?, nickname = ? where player_id = ?';
+        let conn;
+        try {
+            conn = await dbc1.getConnection();
+            const [rows, metadata] = await conn.query(sql, data);
+            conn.release();
+            console.log('rows',rows);
+            return rows[0];
+        } catch (error) {
+            console.error(error);
+            return -1;
+        } finally {
+            if ( conn ) conn.release();
+        }
     }
     
-    deletePlayer(playerId) {
-        return new Promise((resolve, reject) => {
-            for (var player of this.players ) {
-                if ( player.id == playerId ) {
-                    this.players.pop(player);
-                    resolve(player);
-                    return;
-                }
-            }
-            reject({msg:'Can not find that player', code:404});
-        });
+    deletePlayer = async(player_id) => {
+ 
+    const sql = 'delete from players where player_id = ?';
+    let conn;
+    try {
+        conn = await dbc1.getConnection();
+        const [rows, metadata] = await conn.query(sql, player_id);
+        conn.release();
+        console.log('rows',rows);
+        return null;
+    } catch (error) {
+        console.error(error);
+        return -1;
+    } finally {
+        if ( conn ) conn.release();
     }
+}
 }
 
 module.exports = new Player();

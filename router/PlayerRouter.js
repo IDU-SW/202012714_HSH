@@ -16,19 +16,21 @@ router.get('/player/detail/:playerId', updatePlayerform);
 router.post('/players/edit', updatePlayer);
 module.exports = router;
 
-function showPlayerList(req, res) { 
-    const playerList = players.getPlayerList();
-    res.render('player', {players:playerList, count:playerList.length})
-}
+
+ async function showPlayerList(req, res) { 
+     const playerList = await players.getPlayerList();
+     res.render('player', {players:playerList, count:playerList.length})
+ 
+ }
 
 
 // Async-await를 이용하기
 async function showPlayerDetail(req, res) {
     try {
         // 영화 상세 정보 Id
-        const playerId = req.params.playerId;
-        console.log('playerId : ', playerId);
-        const info = await players.getPlayerDetail(playerId);
+        const player_id = req.params.player_id;
+        console.log('player_id : ', player_id);
+        const info = await players.getPlayerDetail(player_id);
       
         res.render('playerDel',{detail:info});
     }
@@ -43,6 +45,7 @@ async function showPlayerDetail(req, res) {
 // POST 요청 분석 -> 바디 파서
 async function addPlayer(req, res) {
     const player = req.body.player;
+  
 
     if (!player) {
         res.status(400).send({error:'player 누락'});
@@ -55,7 +58,10 @@ async function addPlayer(req, res) {
 
     try {
         const result = await players.addPlayer(player, team, age, nickname);
+        if(result != -1)
         res.render('addComplete', {data:result});
+        else
+        res.render('error');
     }
     catch ( error ) {
         res.status(500).send(error.msg);
@@ -67,9 +73,9 @@ function addPlayerForm(req, res) {
 async function updatePlayerform(req, res) {
     try {
        
-        const playerId = req.params.playerId;
-        console.log('playerId : ', playerId);
-        const info = await players.getPlayerDetail(playerId);
+        const player_id = req.params.player_id;
+        console.log('player_id : ', player_id);
+        const info = await players.getPlayerDetail(player_id);
 
         res.render('playerUpdate', {detail:info});
     }
@@ -80,7 +86,7 @@ async function updatePlayerform(req, res) {
 }
 async function updatePlayer(req, res) {
 
-    const id = req.body.id; // id 가져오기
+    const player_id = req.body.player_id; // id 가져오기
     const player = req.body.player;
 
     if (!player) {
@@ -92,7 +98,7 @@ async function updatePlayer(req, res) {
     const nickname = req.body.nickname;
 
     try {
-        const result = await players.updateplayer(id, player, team, age, nickname);
+        const result = await players.updateplayer(player_id, player, team, age, nickname);
         console.log(result);
         res.render('updateComplete',{data:result});
     }
@@ -103,9 +109,12 @@ async function updatePlayer(req, res) {
 
 async function deletePlayer(req, res) {
     try {
-        const id = req.body.id; 
-        const result = await players.deletePlayer(id);
+        const player_id = req.body.player_id; 
+        const result = await players.deletePlayer(player_id);
+        if(result != -1)
         res.render('delComplete');
+        else
+        res.render('error');
     }
     catch ( error ) {
         res.status(400).send({error:'선수 제명실패'});
