@@ -1,0 +1,24 @@
+<html>
+<head>
+   <meta charset="UTF-8" />
+    <title>선수상세</title>
+</head>
+<body>
+    <h1>상세설명</h1>
+    
+    이름 : <%= detail.player %>    </br>
+    
+    팀 : <%= detail.team %>    </br>
+    나이 : <%= detail.age %>   </br>
+    별명 : <%= detail.nickname %>   </br>
+
+    </br>
+
+    <form name="detail" method="post" action="/players/delete">
+        <input type="hidden" name="id" value="<%= detail.id %>">
+        <input type="button" value="수정" onclick="location.href='/players/detail/<%= detail.id %>'">&nbsp;
+        <input type="submit" value="삭제">
+        <input type="button" value="돌아가기" onclick="history.back(-1)">
+    </form>  
+</body>
+</html>

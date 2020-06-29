@@ -1,0 +1,90 @@
+<html>
+    <head>
+       <meta charset="UTF-8" />
+    </head>
+    <body>
+
+        <div id="loginform" style="display:block;">
+            로그인: 
+            <input type="text" id="userId" placeholder="User ID">
+            <input type="password" id="userPw" placeholder="Password">
+            <input type="button" onclick="login()" value="로그인">
+            <input type="button" onclick="logout()" value="로그아웃">
+        </div>
+
+        <h1>선수명단 리스트 </h1>
+        <p>
+            <input type="button" value="선수 추가" onclick="location.href='/player/add'">
+        </p>
+        <% players.forEach(function(item) { %>
+        <h3><a href='/players/<%= item.id %>'>ID : <%= item.id %></a></h3>
+        <ul>
+            <li>player : <%= item.player %>  </li>
+            <li>team : <%= item.team %>  </li>
+            <li>age : <%= item.age %>  </li>
+            <li>nickname : <%= item.nickname %>  </li>
+        </ul>
+        <% }) %>
+
+
+
+
+
+        <script>
+            $(document).ready(function () {
+               console.log('ready!');
+            });
+            function login() {
+               var id = $("#userId").val();
+               var pw = $("#userPw").val();
+               $.ajax({
+                  url: '/MloginChk',
+                  type: 'post',
+                  data: `id=${id}&password=${pw}`
+               }).done((data) => {
+                  // 로그인 성공
+                  alert('로그인 성공');
+                  $("#login-result").text(data);
+                  $("#tagID").show(); 
+                  $("#tag_sub").hide();  
+               }).fail((err) => {
+                  // 로그인 실패            
+                  alert('로그인 실패');
+                  $("#login-result").text(err.statusText);
+               });
+            }
+            function login_sub() {
+               var id = $("#userId").val();
+               var pw = $("#userPw").val();
+               $.ajax({
+                  url: '/MloginChk',
+                  type: 'post',
+                  data: `id=${id}&password=${pw}`
+               }).done((data) => {
+                  // 로그인 성공
+                  alert('로그인 성공');
+                  $("#login-result").text(data);
+                  $("#tagID").show();
+               }).fail((err) => {
+                  // 로그인 실패            
+                  alert('로그인 후 음식 추가 가능합니다.');
+                  $("#loginform").show();  
+                  $("#login-result").text(err.statusText);
+               });
+            }
+            function logout() {
+               $.ajax({
+                  url: '/MlogoutChk',
+                  type: 'delete'
+               }).done((data) => {
+                  // 로그아웃 성공
+                  $("#login-result").text("로그아웃 성공");  
+               }).fail((err) => {
+                  // 로그아웃 실패            
+                  $("#login-result").text("로그아웃 실패");
+               });
+            }
+              
+            </script>
+    </body>
+    </html>
