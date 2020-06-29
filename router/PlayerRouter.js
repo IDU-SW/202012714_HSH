@@ -29,6 +29,8 @@ router.get('/player/add',addPlayerForm);
 
 router.get('/players/detail/:playerId', updatePlayerForm);
 router.post('/players/edit', updatePlayer);
+router.delete('/players/:playerId', deletePlayer);
+router.post('/players/delete', deletePlayer);
 
 router.post('/MloginChk', loginChk); // 로그인
 router.delete('/MlogoutChk', logoutChk); // 로그아웃
@@ -197,4 +199,14 @@ async function logoutChk(req, res) {
           res.sendStatus(200);
        }
     });
+}
+async function deletePlayer(req, res) {
+    try {
+        const id = req.body.id; 
+        const result = await players.deletePlayer(id);
+        res.render('deleteSuccess');
+    }
+    catch ( error ) {
+        res.status(400).send({error:'삭제실패'});
+    }
 }

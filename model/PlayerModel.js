@@ -79,6 +79,23 @@ class Player {
             if ( conn ) conn.release();
         }
     }
+    deletePlayer = async(id) => {
+        
+        const sql = 'delete from players where id = ?';
+        let conn;
+        try {
+            conn = await pool.getConnection();
+            const [rows, metadata] = await conn.query(sql, id);
+            conn.release();
+            console.log('rows',rows);
+            return rows[0];
+        } catch (error) {
+            console.error(error);
+            return -1;
+        } finally {
+            if ( conn ) conn.release();
+        }
+    }
 }
 
 module.exports = new Player();
